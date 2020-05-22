@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Javier
  */
 @Entity
-@Table(name = "vocabulario")
+@Table(name = "VOCABULARIO")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Vocabulario.findAll", query = "SELECT v FROM Vocabulario v"),
@@ -40,11 +40,11 @@ public class Vocabulario implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 80)
-    @Column(name = "palabra")
+    @Column(name = "PALABRA")
     private String palabra;
-    @Column(name = "nr")
+    @Column(name = "NR")
     private Integer nr;
-    @Column(name = "maxtf")
+    @Column(name = "MAXTF")
     private Integer maxtf;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "vocabulario")
     private Collection<Posteo> posteoCollection;
@@ -111,7 +111,7 @@ public class Vocabulario implements Serializable {
 
     @Override
     public String toString() {
-        return "palabra= " + palabra + ", Nr= "+nr+", MaxTf: "+this.maxtf+" ]";
+        return "com.example.DLC2020.entities.Vocabulario[ palabra=" + palabra + " ]";
     }
     
 }

@@ -26,11 +26,11 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Javier
  */
 @Entity
-@Table(name = "documentos")
+@Table(name = "DOCUMENTOS")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Documentos.findAll", query = "SELECT d FROM Documentos d"),
-    @NamedQuery(name = "Documentos.findByIdDoc", query = "SELECT d FROM Documentos d WHERE d.idDoc = :idDoc"),
+    @NamedQuery(name = "Documentos.findByIddoc", query = "SELECT d FROM Documentos d WHERE d.iddoc = :iddoc"),
     @NamedQuery(name = "Documentos.findByNombre", query = "SELECT d FROM Documentos d WHERE d.nombre = :nombre"),
     @NamedQuery(name = "Documentos.findByUrl", query = "SELECT d FROM Documentos d WHERE d.url = :url")})
 public class Documentos implements Serializable {
@@ -39,13 +39,13 @@ public class Documentos implements Serializable {
     @Id
     @Basic(optional = false)
     @NotNull
-    @Column(name = "idDoc")
-    private Integer idDoc;
-    @Size(max = 80)
-    @Column(name = "nombre")
+    @Column(name = "IDDOC")
+    private Integer iddoc;
+    @Size(max = 50)
+    @Column(name = "NOMBRE")
     private String nombre;
     @Size(max = 100)
-    @Column(name = "url")
+    @Column(name = "URL")
     private String url;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "documentos")
     private Collection<Posteo> posteoCollection;
@@ -53,16 +53,16 @@ public class Documentos implements Serializable {
     public Documentos() {
     }
 
-    public Documentos(Integer idDoc) {
-        this.idDoc = idDoc;
+    public Documentos(Integer iddoc) {
+        this.iddoc = iddoc;
     }
 
-    public Integer getIdDoc() {
-        return idDoc;
+    public Integer getIddoc() {
+        return iddoc;
     }
 
-    public void setIdDoc(Integer idDoc) {
-        this.idDoc = idDoc;
+    public void setIddoc(Integer iddoc) {
+        this.iddoc = iddoc;
     }
 
     public String getNombre() {
@@ -93,7 +93,7 @@ public class Documentos implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idDoc != null ? idDoc.hashCode() : 0);
+        hash += (iddoc != null ? iddoc.hashCode() : 0);
         return hash;
     }
 
@@ -104,7 +104,7 @@ public class Documentos implements Serializable {
             return false;
         }
         Documentos other = (Documentos) object;
-        if ((this.idDoc == null && other.idDoc != null) || (this.idDoc != null && !this.idDoc.equals(other.idDoc))) {
+        if ((this.iddoc == null && other.iddoc != null) || (this.iddoc != null && !this.iddoc.equals(other.iddoc))) {
             return false;
         }
         return true;
@@ -112,7 +112,7 @@ public class Documentos implements Serializable {
 
     @Override
     public String toString() {
-        return "com.example.DLC2020.entities.Documentos[ idDoc=" + idDoc + " ]";
+        return "com.example.DLC2020.entities.Documentos[ iddoc=" + iddoc + " ]";
     }
     
 }

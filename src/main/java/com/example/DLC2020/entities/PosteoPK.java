@@ -21,20 +21,28 @@ public class PosteoPK implements Serializable {
 
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 80)
-    @Column(name = "palabra")
-    private String palabra;
+    @Column(name = "IDDOC")
+    private int iddoc;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "idDoc")
-    private int idDoc;
+    @Size(min = 1, max = 80)
+    @Column(name = "PALABRA")
+    private String palabra;
 
     public PosteoPK() {
     }
 
-    public PosteoPK(String palabra, int idDoc) {
+    public PosteoPK(int iddoc, String palabra) {
+        this.iddoc = iddoc;
         this.palabra = palabra;
-        this.idDoc = idDoc;
+    }
+
+    public int getIddoc() {
+        return iddoc;
+    }
+
+    public void setIddoc(int iddoc) {
+        this.iddoc = iddoc;
     }
 
     public String getPalabra() {
@@ -45,19 +53,11 @@ public class PosteoPK implements Serializable {
         this.palabra = palabra;
     }
 
-    public int getIdDoc() {
-        return idDoc;
-    }
-
-    public void setIdDoc(int idDoc) {
-        this.idDoc = idDoc;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
+        hash += (int) iddoc;
         hash += (palabra != null ? palabra.hashCode() : 0);
-        hash += (int) idDoc;
         return hash;
     }
 
@@ -68,10 +68,10 @@ public class PosteoPK implements Serializable {
             return false;
         }
         PosteoPK other = (PosteoPK) object;
-        if ((this.palabra == null && other.palabra != null) || (this.palabra != null && !this.palabra.equals(other.palabra))) {
+        if (this.iddoc != other.iddoc) {
             return false;
         }
-        if (this.idDoc != other.idDoc) {
+        if ((this.palabra == null && other.palabra != null) || (this.palabra != null && !this.palabra.equals(other.palabra))) {
             return false;
         }
         return true;
@@ -79,7 +79,7 @@ public class PosteoPK implements Serializable {
 
     @Override
     public String toString() {
-        return "com.example.DLC2020.entities.PosteoPK[ palabra=" + palabra + ", idDoc=" + idDoc + " ]";
+        return "com.example.DLC2020.entities.PosteoPK[ iddoc=" + iddoc + ", palabra=" + palabra + " ]";
     }
     
 }

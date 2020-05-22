@@ -21,24 +21,24 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Javier
  */
 @Entity
-@Table(name = "posteo")
+@Table(name = "POSTEO")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Posteo.findAll", query = "SELECT p FROM Posteo p"),
-    @NamedQuery(name = "Posteo.findByPalabra", query = "SELECT p FROM Posteo p WHERE p.posteoPK.palabra = :palabra"),
-    @NamedQuery(name = "Posteo.findByIdDoc", query = "SELECT p FROM Posteo p WHERE p.posteoPK.idDoc = :idDoc"),
-    @NamedQuery(name = "Posteo.findByTf", query = "SELECT p FROM Posteo p WHERE p.tf = :tf")})
+    @NamedQuery(name = "Posteo.findByTf", query = "SELECT p FROM Posteo p WHERE p.tf = :tf"),
+    @NamedQuery(name = "Posteo.findByIddoc", query = "SELECT p FROM Posteo p WHERE p.posteoPK.iddoc = :iddoc"),
+    @NamedQuery(name = "Posteo.findByPalabra", query = "SELECT p FROM Posteo p WHERE p.posteoPK.palabra = :palabra")})
 public class Posteo implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected PosteoPK posteoPK;
-    @Column(name = "tf")
+    @Column(name = "TF")
     private Integer tf;
-    @JoinColumn(name = "idDoc", referencedColumnName = "idDoc", insertable = false, updatable = false)
+    @JoinColumn(name = "IDDOC", referencedColumnName = "IDDOC", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Documentos documentos;
-    @JoinColumn(name = "palabra", referencedColumnName = "palabra", insertable = false, updatable = false)
+    @JoinColumn(name = "PALABRA", referencedColumnName = "PALABRA", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Vocabulario vocabulario;
 
@@ -49,8 +49,8 @@ public class Posteo implements Serializable {
         this.posteoPK = posteoPK;
     }
 
-    public Posteo(String palabra, int idDoc) {
-        this.posteoPK = new PosteoPK(palabra, idDoc);
+    public Posteo(int iddoc, String palabra) {
+        this.posteoPK = new PosteoPK(iddoc, palabra);
     }
 
     public PosteoPK getPosteoPK() {
