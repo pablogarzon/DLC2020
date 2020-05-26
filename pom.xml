@@ -44,13 +44,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.derby</groupId>
-            <artifactId>derbyclient</artifactId>
-            <version>10.9.1.0</version>
-            
-        </dependency>
-
-        <dependency>
         	<groupId>jakarta.persistence</groupId>
         	<artifactId>jakarta.persistence-api</artifactId>
         	<version>2.2.3</version>
@@ -95,11 +88,11 @@
             <version>2.5.2</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>mssql-jdbc</artifactId>
-            <version>8.2.0.jre8</version>
-        </dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.4.200</version>
+		</dependency>
     </dependencies>
 
     <build>

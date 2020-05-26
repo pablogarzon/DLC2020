@@ -6,10 +6,11 @@
     <class>com.example.DLC2020.entities.Documentos</class>
     <class>com.example.DLC2020.entities.Posteo</class>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/TPDLC"/>
+      <property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
+	  <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:testdb" />
+<!-- 	  <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/Desktop/testdb" /> -->
       <property name="javax.persistence.jdbc.user" value="dlc"/>
-      <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver"/>
-      <property name="javax.persistence.jdbc.password" value="DLC"/>
+      <property name="javax.persistence.jdbc.password" value="dlc"/>
       <property name="javax.persistence.schema-generation.database.action" value="create"/>
     </properties>
   </persistence-unit>
