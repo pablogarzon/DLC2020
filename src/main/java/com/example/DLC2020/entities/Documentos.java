@@ -5,6 +5,7 @@
  */
 package com.example.DLC2020.entities;
 
+import com.example.DLC2020.dal.commons.DalEntity;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
@@ -27,13 +28,13 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "DOCUMENTOS")
-@XmlRootElement
+//@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Documentos.findAll", query = "SELECT d FROM Documentos d"),
     @NamedQuery(name = "Documentos.findByIddoc", query = "SELECT d FROM Documentos d WHERE d.iddoc = :iddoc"),
     @NamedQuery(name = "Documentos.findByNombre", query = "SELECT d FROM Documentos d WHERE d.nombre = :nombre"),
     @NamedQuery(name = "Documentos.findByUrl", query = "SELECT d FROM Documentos d WHERE d.url = :url")})
-public class Documentos implements Serializable {
+public class Documentos implements Serializable, DalEntity {
 
     private static final long serialVersionUID = 1L;
     @Id

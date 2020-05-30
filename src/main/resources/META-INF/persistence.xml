@@ -7,10 +7,10 @@
     <class>com.example.DLC2020.entities.Posteo</class>
     <properties>
       <property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
-	  <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:testdb" />
-<!-- 	  <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/Desktop/testdb" /> -->
-      <property name="javax.persistence.jdbc.user" value="dlc"/>
-      <property name="javax.persistence.jdbc.password" value="dlc"/>
+<!--	  <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:testdb" /> -->
+ 	  <property name="javax.persistence.jdbc.url" value="jdbc:h2:C:\Users\javie\Dropbox\4k 2020\DLC 4K4\TP\Base de datos H2" /> 
+      <property name="javax.persistence.jdbc.user" value="test"/>
+      <property name="javax.persistence.jdbc.password" value="test"/>
       <property name="javax.persistence.schema-generation.database.action" value="create"/>
     </properties>
   </persistence-unit>
