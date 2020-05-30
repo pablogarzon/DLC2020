@@ -5,6 +5,7 @@
  */
 package com.example.DLC2020.entities;
 
+import com.example.DLC2020.dal.commons.DalEntity;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
@@ -33,7 +34,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Vocabulario.findByPalabra", query = "SELECT v FROM Vocabulario v WHERE v.palabra = :palabra"),
     @NamedQuery(name = "Vocabulario.findByNr", query = "SELECT v FROM Vocabulario v WHERE v.nr = :nr"),
     @NamedQuery(name = "Vocabulario.findByMaxtf", query = "SELECT v FROM Vocabulario v WHERE v.maxtf = :maxtf")})
-public class Vocabulario implements Serializable {
+public class Vocabulario implements Serializable, DalEntity {
 
     private static final long serialVersionUID = 1L;
     @Id

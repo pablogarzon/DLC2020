@@ -5,6 +5,7 @@
  */
 package com.example.DLC2020.entities;
 
+import com.example.DLC2020.dal.commons.DalEntity;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -28,7 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Posteo.findByTf", query = "SELECT p FROM Posteo p WHERE p.tf = :tf"),
     @NamedQuery(name = "Posteo.findByIddoc", query = "SELECT p FROM Posteo p WHERE p.posteoPK.iddoc = :iddoc"),
     @NamedQuery(name = "Posteo.findByPalabra", query = "SELECT p FROM Posteo p WHERE p.posteoPK.palabra = :palabra")})
-public class Posteo implements Serializable {
+public class Posteo implements Serializable, DalEntity {
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
