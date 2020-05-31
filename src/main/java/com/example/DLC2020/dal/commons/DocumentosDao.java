@@ -8,15 +8,15 @@ package com.example.DLC2020.dal.commons;
 import com.example.DLC2020.dal.commons.DaoEclipseLink;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
-import com.example.DLC2020.entities.Documentos;
+import com.example.DLC2020.entities.Documento;
 
 /**
  *
  * @author Javier
  */
-public class DocumentosDao extends DaoEclipseLink<Documentos, Integer>{
+public class DocumentoDao extends DaoEclipseLink<Documento, Integer>{
     public DocumentosDao(){
-        super(Documentos.class);
+        super(Documento.class);
     }
     
     

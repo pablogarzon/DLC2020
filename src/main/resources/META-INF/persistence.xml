@@ -3,12 +3,12 @@
   <persistence-unit name="com.example_DLC2020_jar_0.0.1-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>com.example.DLC2020.entities.Vocabulario</class>
-    <class>com.example.DLC2020.entities.Documentos</class>
     <class>com.example.DLC2020.entities.Posteo</class>
+    <class>com.example.DLC2020.entities.Documento</class>
     <properties>
-      <property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
-<!--	  <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:testdb" /> -->
- 	  <property name="javax.persistence.jdbc.url" value="jdbc:h2:C:\Users\javie\Dropbox\4k 2020\DLC 4K4\TP\Base de datos H2" /> 
+      <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
+      <!--	  <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:testdb" /> -->
+      <property name="javax.persistence.jdbc.url" value="jdbc:h2:C:\Users\javie\Dropbox\4k 2020\DLC 4K4\TP\Base de datos H2"/>
       <property name="javax.persistence.jdbc.user" value="test"/>
       <property name="javax.persistence.jdbc.password" value="test"/>
       <property name="javax.persistence.schema-generation.database.action" value="create"/>

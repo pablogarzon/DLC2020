@@ -10,6 +10,7 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -37,10 +38,10 @@ public class Posteo implements Serializable, DalEntity {
     @Column(name = "TF")
     private Integer tf;
     @JoinColumn(name = "IDDOC", referencedColumnName = "IDDOC", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private Documentos documentos;
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Documento documento;
     @JoinColumn(name = "PALABRA", referencedColumnName = "PALABRA", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Vocabulario vocabulario;
 
     public Posteo() {
@@ -70,12 +71,12 @@ public class Posteo implements Serializable, DalEntity {
         this.tf = tf;
     }
 
-    public Documentos getDocumentos() {
-        return documentos;
+    public Documento getDocumentos() {
+        return documento;
     }
 
-    public void setDocumentos(Documentos documentos) {
-        this.documentos = documentos;
+    public void setDocumentos(Documento documentos) {
+        this.documento = documentos;
     }
 
     public Vocabulario getVocabulario() {

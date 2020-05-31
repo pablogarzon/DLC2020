@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Documentos.findByIddoc", query = "SELECT d FROM Documentos d WHERE d.iddoc = :iddoc"),
     @NamedQuery(name = "Documentos.findByNombre", query = "SELECT d FROM Documentos d WHERE d.nombre = :nombre"),
     @NamedQuery(name = "Documentos.findByUrl", query = "SELECT d FROM Documentos d WHERE d.url = :url")})
-public class Documentos implements Serializable, DalEntity {
+public class Documento implements Serializable, DalEntity {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -51,10 +51,10 @@ public class Documentos implements Serializable, DalEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "documentos")
     private Collection<Posteo> posteoCollection;
 
-    public Documentos() {
+    public Documento() {
     }
 
-    public Documentos(Integer iddoc) {
+    public Documento(Integer iddoc) {
         this.iddoc = iddoc;
     }
 
@@ -101,10 +101,10 @@ public class Documentos implements Serializable, DalEntity {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Documentos)) {
+        if (!(object instanceof Documento)) {
             return false;
         }
-        Documentos other = (Documentos) object;
+        Documento other = (Documento) object;
         if ((this.iddoc == null && other.iddoc != null) || (this.iddoc != null && !this.iddoc.equals(other.iddoc))) {
             return false;
         }
