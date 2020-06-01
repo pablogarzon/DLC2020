@@ -20,10 +20,7 @@ public class SearchService {
 		this.v = v;
 		this.documentoDao = documentoDao;
 	}
-	/*
-	 * nr = !idf
-	 * distancia coseno sim(di, dj)
-	 */
+
 	public List<Documento> search(String q) {
 		System.out.println("search starts at " + System.currentTimeMillis());
 		// < di, ir>

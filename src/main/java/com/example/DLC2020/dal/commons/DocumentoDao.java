@@ -15,7 +15,7 @@ import com.example.DLC2020.entities.Documento;
  * @author Javier
  */
 public class DocumentoDao extends DaoEclipseLink<Documento, Integer>{
-    public DocumentosDao(){
+    public DocumentoDao(){
         super(Documento.class);
     }
     
