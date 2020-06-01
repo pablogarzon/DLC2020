@@ -25,5 +25,7 @@ public interface Dao<E extends DalEntity, K>
     E retrieve(K pKey);
 
     List<E> findAll();
+    
+    long count();
 
 }

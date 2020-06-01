@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import com.example.DLC2020.dal.commons.DocumentoDao;
 import com.example.DLC2020.dal.commons.VocabularioDao;
 import com.example.DLC2020.entities.Documento;
 import com.example.DLC2020.entities.Posteo;
@@ -23,8 +24,7 @@ public class SearchServiceTest {
 	private SearchService service;
 
 	private VocabularioDao vocabularioDao;
-	
-	
+	private DocumentoDao documentoDao;
 
 	private String title1 = "hello world";
 	private String title2 = "hello world program";
@@ -37,6 +37,7 @@ public class SearchServiceTest {
 	@Before
 	public void setUp() {
 		vocabularioDao = Mockito.mock(VocabularioDao.class);
+		documentoDao = Mockito.mock(DocumentoDao.class);
 
 		Documento doc1 = new Documento(1, title1, "url1");
 		Documento doc2 = new Documento(2, title2, "url2");
@@ -97,6 +98,7 @@ public class SearchServiceTest {
 		}));
 		
 		when(vocabularioDao.findAll()).thenReturn(words);
+		when(documentoDao.count()).thenReturn(7L);
 	}
 
 	private Vocabulario createVocabulario(String word, Map<Documento, Integer> docs) {
@@ -115,7 +117,7 @@ public class SearchServiceTest {
 
 	@Test
 	public void testSearch() {
-		service = new SearchService(vocabularioDao, null);
+		service = new SearchService(vocabularioDao, documentoDao);
 		List<Documento> result = service.search("cadillacs dinosaurs cataclysm");
 		assertTrue(result.get(0).getNombre().equals(title6));
 		assertTrue(result.get(1).getNombre().equals(title5));

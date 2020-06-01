@@ -15,22 +15,23 @@ import com.example.DLC2020.entities.Vocabulario;
 
 public class SearchService {
 	
-	public final static int R = 10;
 	private final VocabularioDao vocabularioDao;
 	private final DocumentoDao documentoDao;
+	
+	public final static int R = 10;
+	public final long N;
 	
 	@Inject
 	public SearchService(VocabularioDao vocabularioDao, DocumentoDao documentoDao) {
 		this.vocabularioDao = vocabularioDao;
 		this.documentoDao = documentoDao;
+		N = documentoDao.count();
 	}
 
 	public List<Documento> search(String q) {
 		System.out.println("search starts at " + System.currentTimeMillis());
 		// < di, ir>
 		Map<Documento, Double> ld = new TreeMap<>();
-		
-		long N = 7;
 		
 		//filtrar y ordenar elementos
 		List<Vocabulario> v = getV(q);
@@ -48,14 +49,14 @@ public class SearchService {
 			});
 		});
 		
-		List res = ld.entrySet().stream()
+		List result = ld.entrySet().stream()
 			.sorted((o1, o2) -> Double.compare(o2.getValue(), o1.getValue()))
 			.map(Map.Entry::getKey)
 			.collect(Collectors.toList());
 		
-		System.out.println("search end at " + System.currentTimeMillis());
+		System.out.println("search ends at " + System.currentTimeMillis());
 		
-		return res;
+		return result;
 	}
 
 	private List<Vocabulario> getV(String q) {
