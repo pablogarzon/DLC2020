@@ -38,10 +38,10 @@
           </form>
         </header>
         <section class="section">
-            <article class="box" v-for="title in results">
+            <article class="box" v-for="doc in docs">
                 <div class="columns is-vcentered">
                     <div class="column is-half">
-                        <h4 class="title is-4">{{title}}</h3>
+                        <h4 class="title is-4">{{doc.nombre}}</h3>
                     </div>
                     <div class="column is-half has-text-right">
                         <a href="#">Descargar</a>
@@ -67,7 +67,7 @@
 	  		    axios
                   .get('dlc2020/query=' + this.query)
       			  .then(response => {
-      			  	this.results = response.data;
+      			  	this.docs = response.data;
       			  	this.isLoading = false;
       			  });
 		  		e.preventDefault();

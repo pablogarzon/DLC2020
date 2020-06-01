@@ -1,12 +1,13 @@
 package com.example.DLC2020;
 
+import java.io.IOException;
+import java.net.URI;
+
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.server.mvc.freemarker.FreemarkerMvcFeature;
 
-import java.io.IOException;
-import java.net.URI;
+import com.example.DLC2020.config.AppConfig;
 
 /**
  * Main class.
@@ -23,10 +24,7 @@ public class Main {
     public static HttpServer startServer() {
         // create a resource config that scans for JAX-RS resources and providers
         // in com.example.DLC2020 package        
-        final ResourceConfig rc = new ResourceConfig()
-        		.packages("com.example.DLC2020")
-        		.property(FreemarkerMvcFeature.TEMPLATE_BASE_PATH, "views")
-        		.register(FreemarkerMvcFeature.class);
+        final ResourceConfig rc = new AppConfig();
 
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI

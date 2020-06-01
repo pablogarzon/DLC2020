@@ -18,7 +18,7 @@ import javax.transaction.Transactional;
  */
 public abstract class DaoEclipseLink<E extends DalEntity, K> implements Dao<E, K>
 {
-    //@Inject
+    @Inject
     @PersistenceContext(unitName="com.example_DLC2020_jar_0.0.1-SNAPSHOTPU")
     protected EntityManager entityManager;
 	

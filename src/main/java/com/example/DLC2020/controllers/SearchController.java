@@ -3,7 +3,12 @@ package com.example.DLC2020.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.glassfish.jersey.server.mvc.Viewable;
+
+import com.example.DLC2020.entities.Documento;
+import com.example.DLC2020.services.SearchService;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -13,6 +18,13 @@ import jakarta.ws.rs.core.MediaType;
 
 @Path("/")
 public class SearchController {
+	
+	private final SearchService service;
+	
+	@Inject
+	public SearchController(SearchService service) {
+		this.service = service;
+	}
 
 	@GET
 	public Viewable init() {
@@ -22,11 +34,9 @@ public class SearchController {
 	@GET
 	@Path("{query}")
 	@Produces({MediaType.APPLICATION_JSON})
-	public List<String> titles(@PathParam("query") String query) {
-		List<String> results = new ArrayList<>();
-		results.add("prueba1");
-		results.add("prueba2");
-		results.add("prueba3");		
-		return results;
+	public List<Documento> search(@PathParam("query") String query) {
+		List<Documento> docs = new ArrayList<>();
+		service.search(query);
+		return docs;
 	}
 }
