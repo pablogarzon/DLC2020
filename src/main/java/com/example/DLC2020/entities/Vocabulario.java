@@ -56,6 +56,13 @@ public class Vocabulario implements Serializable, DalEntity {
     public Vocabulario(String palabra) {
         this.palabra = palabra;
     }
+    
+    public Vocabulario(String palabra, Collection<Posteo> posteoCollection) {
+        this.palabra = palabra;
+        this.posteoCollection = posteoCollection;
+        this.nr = 0;
+        this.maxtf = 0;
+    }
 
     public String getPalabra() {
         return palabra;
@@ -88,6 +95,13 @@ public class Vocabulario implements Serializable, DalEntity {
 
     public void setPosteoCollection(Collection<Posteo> posteoCollection) {
         this.posteoCollection = posteoCollection;
+    }
+    
+    public void addPosteo(Posteo posteo) {
+    	if (this.posteoCollection != null) {
+			this.posteoCollection.add(posteo);
+			this.nr += 1;
+		}
     }
 
     @Override

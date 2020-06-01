@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Documentos.findByIddoc", query = "SELECT d FROM Documentos d WHERE d.iddoc = :iddoc"),
     @NamedQuery(name = "Documentos.findByNombre", query = "SELECT d FROM Documentos d WHERE d.nombre = :nombre"),
     @NamedQuery(name = "Documentos.findByUrl", query = "SELECT d FROM Documentos d WHERE d.url = :url")})
-public class Documento implements Serializable, DalEntity {
+public class Documento implements Serializable, DalEntity, Comparable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -51,14 +51,21 @@ public class Documento implements Serializable, DalEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "documentos")
     private Collection<Posteo> posteoCollection;
 
-    public Documento() {
+	public Documento() {
     }
 
     public Documento(Integer iddoc) {
         this.iddoc = iddoc;
     }
 
-    public Integer getIddoc() {
+    public Documento(@NotNull Integer iddoc, @Size(max = 50) String nombre, @Size(max = 100) String url) {
+		super();
+		this.iddoc = iddoc;
+		this.nombre = nombre;
+		this.url = url;
+	}
+
+	public Integer getIddoc() {
         return iddoc;
     }
 
@@ -81,15 +88,16 @@ public class Documento implements Serializable, DalEntity {
     public void setUrl(String url) {
         this.url = url;
     }
-
+    
     @XmlTransient
     public Collection<Posteo> getPosteoCollection() {
-        return posteoCollection;
-    }
+		return posteoCollection;
+	}
 
-    public void setPosteoCollection(Collection<Posteo> posteoCollection) {
-        this.posteoCollection = posteoCollection;
-    }
+	public void setPosteoCollection(Collection<Posteo> posteoCollection) {
+		this.posteoCollection = posteoCollection;
+	}
+
 
     @Override
     public int hashCode() {
@@ -115,5 +123,14 @@ public class Documento implements Serializable, DalEntity {
     public String toString() {
         return "com.example.DLC2020.entities.Documentos[ iddoc=" + iddoc + " ]";
     }
+
+	@Override
+	public int compareTo(Object o) {
+		if (!(o instanceof Documento)) {
+            return 0;
+        }
+        Documento other = (Documento) o;
+		return Integer.compare(this.iddoc, other.iddoc);
+	}
     
 }
