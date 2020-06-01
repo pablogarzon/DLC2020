@@ -44,7 +44,6 @@ public class Main {
                 + "%s\nHit enter to stop it...", BASE_URI));
         System.in.read();
         server.stop();
-        API.staticRun();
     }
 }
 

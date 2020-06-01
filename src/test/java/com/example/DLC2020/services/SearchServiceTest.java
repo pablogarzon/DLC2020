@@ -1,6 +1,7 @@
 package com.example.DLC2020.services;
 
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +11,9 @@ import java.util.Map.Entry;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
+import com.example.DLC2020.dal.commons.VocabularioDao;
 import com.example.DLC2020.entities.Documento;
 import com.example.DLC2020.entities.Posteo;
 import com.example.DLC2020.entities.Vocabulario;
@@ -19,7 +22,9 @@ public class SearchServiceTest {
 
 	private SearchService service;
 
-	private Map<String, Vocabulario> v;
+	private VocabularioDao vocabularioDao;
+	
+	
 
 	private String title1 = "hello world";
 	private String title2 = "hello world program";
@@ -31,7 +36,7 @@ public class SearchServiceTest {
 
 	@Before
 	public void setUp() {
-		v = new HashMap<String, Vocabulario>();
+		vocabularioDao = Mockito.mock(VocabularioDao.class);
 
 		Documento doc1 = new Documento(1, title1, "url1");
 		Documento doc2 = new Documento(2, title2, "url2");
@@ -40,75 +45,77 @@ public class SearchServiceTest {
 		Documento doc5 = new Documento(5, title5, "url5");
 		Documento doc6 = new Documento(6, title6, "url6");
 		Documento doc7 = new Documento(7, title7, "url7");
+		
+		List<Vocabulario> words = new ArrayList<>();
 
-		fillV("hello", new HashMap() {
+		words.add(createVocabulario("hello", new HashMap() {
 			{
 				put(doc1, 1);
 				put(doc2, 1);
 			}
-		}); // Arrays.asList(, doc2, doc3));
-		fillV("world", new HashMap() {
+		})); // Arrays.asList(, doc2, doc3));
+		words.add(createVocabulario("world", new HashMap() {
 			{
 				put(doc1, 1);
 				put(doc2, 1);
 				put(doc3, 1);
 			}
-		});
-		fillV("program", new HashMap() {
+		}));
+		words.add(createVocabulario("program", new HashMap() {
 			{
 				put(doc2, 2);
 			}
-		});
-		fillV("super", new HashMap() {
+		}));
+		words.add(createVocabulario("super", new HashMap() {
 			{
 				put(doc3, 3);
 			}
-		});
-		fillV("mario", new HashMap() {
+		}));
+		words.add(createVocabulario("mario", new HashMap() {
 			{
 				put(doc3, 3);
 			}
-		});
-		fillV("dinosaurs", new HashMap() {
+		}));
+		words.add(createVocabulario("dinosaurs", new HashMap() {
 			{
 				put(doc4, 5);
 				put(doc5, 3);
 				put(doc6, 3);
 				put(doc7, 2);
 			}
-		});
-		fillV("cadillacs", new HashMap() {
+		}));
+		words.add(createVocabulario("cadillacs", new HashMap() {
 			{
 				put(doc5, 3);
 				put(doc6, 3);
 			}
-		});
-		fillV("cataclysm", new HashMap() {
+		}));
+		words.add(createVocabulario("cataclysm", new HashMap() {
 			{
 				put(doc6, 2);
 			}
-		});
+		}));
+		
+		when(vocabularioDao.findAll()).thenReturn(words);
 	}
 
-	private void fillV(String word, Map<Documento, Integer> docs) {
-		if (!v.containsKey(word)) {
-			Vocabulario vocabulario = new Vocabulario(word, new ArrayList<>());
+	private Vocabulario createVocabulario(String word, Map<Documento, Integer> docs) {
+		Vocabulario vocabulario = new Vocabulario(word, new ArrayList<>());
 
-			for (Entry<Documento, Integer> doc : docs.entrySet()) {
-				Posteo p = new Posteo();
-				p.setVocabulario(vocabulario);
-				p.setDocumentos(doc.getKey());
-				p.setTf(doc.getValue());
-				vocabulario.addPosteo(p);
-			}
-
-			v.put(word, vocabulario);
+		for (Entry<Documento, Integer> doc : docs.entrySet()) {
+			Posteo p = new Posteo();
+			p.setVocabulario(vocabulario);
+			p.setDocumentos(doc.getKey());
+			p.setTf(doc.getValue());
+			vocabulario.addPosteo(p);
 		}
+		
+		return vocabulario;
 	}
 
 	@Test
 	public void testSearch() {
-		service = new SearchService(v, null);
+		service = new SearchService(vocabularioDao, null);
 		List<Documento> result = service.search("cadillacs dinosaurs cataclysm");
 		assertTrue(result.get(0).getNombre().equals(title6));
 		assertTrue(result.get(1).getNombre().equals(title5));

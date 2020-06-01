@@ -6,18 +6,22 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
 import com.example.DLC2020.dal.commons.DocumentoDao;
+import com.example.DLC2020.dal.commons.VocabularioDao;
 import com.example.DLC2020.entities.Documento;
 import com.example.DLC2020.entities.Vocabulario;
 
 public class SearchService {
 	
 	public final static int R = 10;
-	private final Map<String, Vocabulario> v;
+	private final VocabularioDao vocabularioDao;
 	private final DocumentoDao documentoDao;
 	
-	public SearchService(Map<String, Vocabulario> v, DocumentoDao documentoDao) {
-		this.v = v;
+	@Inject
+	public SearchService(VocabularioDao vocabularioDao, DocumentoDao documentoDao) {
+		this.vocabularioDao = vocabularioDao;
 		this.documentoDao = documentoDao;
 	}
 
@@ -28,15 +32,10 @@ public class SearchService {
 		
 		long N = 7;
 		
-		List<String> terms = Arrays.asList(q.split(" "));
+		//filtrar y ordenar elementos
+		List<Vocabulario> v = getV(q);
 		
-		List<Vocabulario> words = v.entrySet().stream()
-			.filter(w -> terms.contains(w.getKey()))
-			.map(Map.Entry::getValue)
-			.sorted((o1, o2) -> Integer.compare(o2.getNr(), o1.getNr()))
-			.collect(Collectors.toList());
-		
-		words.forEach(tk -> {
+		v.forEach(tk -> {
 			int i = 0;
 			tk.getPosteoCollection().forEach(pk -> {
 				if (i < R) {
@@ -57,5 +56,16 @@ public class SearchService {
 		System.out.println("search end at " + System.currentTimeMillis());
 		
 		return res;
+	}
+
+	private List<Vocabulario> getV(String q) {
+		List<String> terms = Arrays.asList(q.split(" "));
+		
+		List<Vocabulario> words = vocabularioDao.findAll();
+		
+		return words.stream()
+			.filter(w -> terms.contains(w.getPalabra()))
+			.sorted((o1, o2) -> Integer.compare(o2.getNr(), o1.getNr()))
+			.collect(Collectors.toList());
 	}
 }
