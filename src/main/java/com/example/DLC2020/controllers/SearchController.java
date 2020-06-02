@@ -51,7 +51,7 @@ public class SearchController {
 		File file = new File(path);
 		ResponseBuilder response = Response.ok((Object) file);
 		response.header("Content-Disposition",
-			"attachment; filename=\"file_from_server.log\"");
+			"attachment; filename=\"filename.txt\"");
 		return response.build();
 	}
 }

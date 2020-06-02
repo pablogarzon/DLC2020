@@ -8,6 +8,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.ParameterExpression;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
@@ -97,21 +98,6 @@ public abstract class DaoEclipseLink<E extends DalEntity, K> implements Dao<E, K
             Root<E> rootQuery = cq.from(entityClass);
             cq.select(rootQuery);
             TypedQuery<E> query = entityManager.createQuery(cq);
-            return query.getResultList();
-        }
-        catch (Exception ex)
-        {
-            throw new TechnicalException(ex);
-        }
-
-    }
-    public List<E> findByFilter(String filter)
-    {
-        try
-        {
-            Query query = entityManager.createNamedQuery(className + ".findByFilter")
-                .setParameter(":filter", filter);
-
             return query.getResultList();
         }
         catch (Exception ex)

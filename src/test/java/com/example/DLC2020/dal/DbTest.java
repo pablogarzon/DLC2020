@@ -1,8 +1,10 @@
 package com.example.DLC2020.dal;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 
@@ -30,11 +32,15 @@ public class DbTest {
 		doc1.setNombre(TestUtils.title1);
 		doc1.setUrl("url");
 		documentoDao.create(doc1);
-		
 		Vocabulario vocabulario = TestUtils.createVocabulario("drama", new HashMap() {{ put(doc1, 1);}});
-		
-		Vocabulario v1 = (Vocabulario) vocabularioDao.create(vocabulario);
+		Vocabulario v1 = vocabularioDao.create(vocabulario);
 		assertTrue("object is not null", v1 != null);
+		
+		List<Vocabulario> words = vocabularioDao.findAll();
+		assertTrue("list is not empty", words != null && words.size() > 0);
+		
+		Vocabulario find = vocabularioDao.findByWord("drama");
+		assertTrue("findbyWord is ok", find != null);
 
 	}
 }

@@ -11,6 +11,4 @@ public class PosteoDao extends DaoEclipseLink<Posteo, Integer> {
     public PosteoDao(EntityManager manager){
         super(Posteo.class, manager);
     }
-    
-    
 }
