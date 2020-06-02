@@ -107,7 +107,7 @@ public class SearchServiceTest {
 		for (Entry<Documento, Integer> doc : docs.entrySet()) {
 			Posteo p = new Posteo();
 			p.setVocabulario(vocabulario);
-			p.setDocumentos(doc.getKey());
+			p.setDocumento(doc.getKey());
 			p.setTf(doc.getValue());
 			vocabulario.addPosteo(p);
 		}

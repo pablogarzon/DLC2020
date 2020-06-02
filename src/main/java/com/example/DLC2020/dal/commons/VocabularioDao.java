@@ -1,19 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.example.DLC2020.dal.commons;
+
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
 
 import com.example.DLC2020.dal.commons.DaoEclipseLink;
 import com.example.DLC2020.entities.Vocabulario;
-/**
- *
- * @author Javier
- */
-public class VocabularioDao extends DaoEclipseLink{
-    public VocabularioDao(){
-        super(Vocabulario.class);
+
+public class VocabularioDao extends DaoEclipseLink<Vocabulario, Integer>{
+	
+	@Inject
+    public VocabularioDao(EntityManager entityManager){
+        super(Vocabulario.class, entityManager);
     }
     
 }

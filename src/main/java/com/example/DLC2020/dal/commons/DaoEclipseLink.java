@@ -3,14 +3,15 @@ package com.example.DLC2020.dal.commons;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-
-import com.example.DLC2020.dal.exceptions.*;
-import javax.inject.Inject;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
+
+import com.example.DLC2020.dal.exceptions.TechnicalException;
 
 /**
  * @param <E> Tipo de la entidad asociada
@@ -18,15 +19,14 @@ import javax.transaction.Transactional;
  */
 public abstract class DaoEclipseLink<E extends DalEntity, K> implements Dao<E, K>
 {
-    @Inject
-    @PersistenceContext(unitName="com.example_DLC2020_jar_0.0.1-SNAPSHOTPU")
     protected EntityManager entityManager;
 	
     private final Class<E> entityClass;
 
     private String className;
 
-    public DaoEclipseLink(Class<E> entityClass) {
+    public DaoEclipseLink(Class<E> entityClass, EntityManager entityManager) {
+    	this.entityManager = entityManager;
 		this.entityClass = entityClass;
 		this.className = entityClass.getSimpleName();
 	}
@@ -37,8 +37,10 @@ public abstract class DaoEclipseLink<E extends DalEntity, K> implements Dao<E, K
     {
         try
         {
-            entityManager.persist(pData);
-            entityManager.flush();
+        	EntityTransaction tx = entityManager.getTransaction();
+        	tx.begin();
+        	entityManager.persist(pData);
+        	tx.commit();
         }
         catch (Exception ex)
         {
@@ -90,7 +92,11 @@ public abstract class DaoEclipseLink<E extends DalEntity, K> implements Dao<E, K
     {
         try
         {
-            Query query = entityManager.createNamedQuery(className + ".findAll");
+        	CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<E> cq = cb.createQuery(entityClass);
+            Root<E> rootQuery = cq.from(entityClass);
+            cq.select(rootQuery);
+            TypedQuery<E> query = entityManager.createQuery(cq);
             return query.getResultList();
         }
         catch (Exception ex)

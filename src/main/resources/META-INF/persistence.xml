@@ -5,13 +5,16 @@
     <class>com.example.DLC2020.entities.Vocabulario</class>
     <class>com.example.DLC2020.entities.Posteo</class>
     <class>com.example.DLC2020.entities.Documento</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
-      <!--	  <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:testdb" /> -->
-      <property name="javax.persistence.jdbc.url" value="jdbc:h2:C:\Users\javie\Dropbox\4k 2020\DLC 4K4\TP\Base de datos H2"/>
+<!--       <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:testdb" /> -->
+      <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/Desktop/testdb" />
       <property name="javax.persistence.jdbc.user" value="test"/>
       <property name="javax.persistence.jdbc.password" value="test"/>
-      <property name="javax.persistence.schema-generation.database.action" value="create"/>
+<!--       <property name="javax.persistence.schema-generation.database.action" value="create"/> -->
+      <property name="eclipselink.ddl-generation" value="drop-and-create-tables" />
+	  <property name="eclipselink.ddl-generation.output-mode" value="database" />
     </properties>
   </persistence-unit>
 </persistence>

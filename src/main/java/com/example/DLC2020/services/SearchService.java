@@ -19,33 +19,40 @@ public class SearchService {
 	private final DocumentoDao documentoDao;
 	
 	public final static int R = 10;
-	public final long N;
+	public long N;
 	
 	@Inject
 	public SearchService(VocabularioDao vocabularioDao, DocumentoDao documentoDao) {
 		this.vocabularioDao = vocabularioDao;
 		this.documentoDao = documentoDao;
-		N = documentoDao.count();
 	}
 
 	public List<Documento> search(String q) {
-		System.out.println("search starts at " + System.currentTimeMillis());
-		// < di, ir>
 		Map<Documento, Double> ld = new TreeMap<>();
 		
+		N = documentoDao.count();
+		
+		List<String> terms = Arrays.asList(q.split(" "));
+		List<Vocabulario> words = vocabularioDao.findAll();
+		
 		//filtrar y ordenar elementos
-		List<Vocabulario> v = getV(q);
+		 List<Vocabulario> v = getV(q);
+		
 		
 		v.forEach(tk -> {
 			int i = 0;
-			tk.getPosteoCollection().forEach(pk -> {
+			tk.getPosteos().forEach(pk -> {
 				if (i < R) {
-					double prevVal = ld.getOrDefault(pk.getDocumentos(), 0.0);
-					double val = prevVal + Math.log(pk.getTf() * (N / tk.getNr()));
-					ld.put(pk.getDocumentos(), val);
+					try {
+						double prevVal = ld.getOrDefault(pk.getDocumento(), 0.0);
+						double val = prevVal + Math.log(pk.getTf() * (N / tk.getNr()));
+						ld.put(pk.getDocumento(), val);
+					} catch (Exception e) {
+						System.out.println(e);
+					}
 				} else {
 					return;
-				}
+				};
 			});
 		});
 		
@@ -54,14 +61,12 @@ public class SearchService {
 			.map(Map.Entry::getKey)
 			.collect(Collectors.toList());
 		
-		System.out.println("search ends at " + System.currentTimeMillis());
-		
 		return result;
 	}
 
 	private List<Vocabulario> getV(String q) {
-		List<String> terms = Arrays.asList(q.split(" "));
 		
+		List<String> terms = Arrays.asList(q.split(" "));
 		List<Vocabulario> words = vocabularioDao.findAll();
 		
 		return words.stream()
