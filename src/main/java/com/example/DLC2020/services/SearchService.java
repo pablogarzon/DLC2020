@@ -1,5 +1,6 @@
 package com.example.DLC2020.services;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,7 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import com.example.DLC2020.Commons;
 import com.example.DLC2020.dal.commons.DocumentoDao;
 import com.example.DLC2020.dal.commons.VocabularioDao;
 import com.example.DLC2020.entities.Documento;
@@ -66,12 +68,21 @@ public class SearchService {
 
 	private List<Vocabulario> getV(String q) {
 		
-		List<String> terms = Arrays.asList(q.split(" "));
-		List<Vocabulario> words = vocabularioDao.findAll();
+		List<String> terms = Arrays.asList(q.split(Commons.delims));
+		//List<Vocabulario> words = vocabularioDao.findAll();
 		
-		return words.stream()
-			.filter(w -> terms.contains(w.getPalabra()))
-			.sorted((o1, o2) -> Integer.compare(o2.getNr(), o1.getNr()))
-			.collect(Collectors.toList());
+
+//		return words.stream()
+//			.filter(w -> terms.contains(w.getPalabra()))
+//			.sorted((o1, o2) -> Integer.compare(o2.getNr(), o1.getNr()))
+//			.collect(Collectors.toList());
+		
+		List<Vocabulario> words = new ArrayList<Vocabulario>();
+		for (String w : terms) {
+			words.add(vocabularioDao.findByWord(w));
+		}
+		
+		return words.stream().sorted((o1, o2) -> Integer.compare(o2.getNr(), o1.getNr()))
+				.collect(Collectors.toList());
 	}
 }

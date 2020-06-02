@@ -98,6 +98,10 @@ public class Posteo implements Serializable, DalEntity {
 	public void setTf(Integer tf) {
 		this.tf = tf;
 	}
+	
+	public void incrementTf(Integer tf) {
+		this.tf += tf;
+	}
 
 
 
