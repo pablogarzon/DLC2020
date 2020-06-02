@@ -1,6 +1,5 @@
 package com.example.DLC2020.dal;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
@@ -17,7 +16,7 @@ import com.example.DLC2020.dal.commons.VocabularioDao;
 import com.example.DLC2020.entities.Documento;
 import com.example.DLC2020.entities.Vocabulario;
 
-public class DbTest {
+public class DaoTest {
 
 	private VocabularioDao vocabularioDao;
 	private DocumentoDao documentoDao;
@@ -29,17 +28,17 @@ public class DbTest {
 		documentoDao = new DocumentoDao(entityManager);
 		
 		Documento doc1 = new Documento();
-		doc1.setNombre(TestUtils.title1);
+		doc1.setNombre("title");
 		doc1.setUrl("url");
 		documentoDao.create(doc1);
-		Vocabulario vocabulario = TestUtils.createVocabulario("drama", new HashMap() {{ put(doc1, 1);}});
+		Vocabulario vocabulario = TestUtils.createVocabulario(TestUtils.STR_HELLO, new HashMap() {{ put(doc1, 1);}});
 		Vocabulario v1 = vocabularioDao.create(vocabulario);
 		assertTrue("object is not null", v1 != null);
 		
 		List<Vocabulario> words = vocabularioDao.findAll();
 		assertTrue("list is not empty", words != null && words.size() > 0);
 		
-		Vocabulario find = vocabularioDao.findByWord("drama");
+		Vocabulario find = vocabularioDao.findByWord(TestUtils.STR_HELLO);
 		assertTrue("findbyWord is ok", find != null);
 
 	}
