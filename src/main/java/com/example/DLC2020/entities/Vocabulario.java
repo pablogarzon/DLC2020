@@ -1,6 +1,7 @@
 package com.example.DLC2020.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.persistence.Basic;
@@ -23,10 +24,7 @@ public class Vocabulario implements Serializable, DalEntity {
 
 	private static final long serialVersionUID = 1L;
 	
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private long id;	
-	
+	@Id	
 	@Basic(optional = false)
 	@NotNull
 	@Size(min = 1, max = 80)
@@ -43,25 +41,20 @@ public class Vocabulario implements Serializable, DalEntity {
 	private Collection<Posteo> posteos;
 
 	public Vocabulario() {
-	}
-
-	public Vocabulario(String palabra) {
-		this.palabra = palabra;
-	}
-
-	public Vocabulario(String palabra, Collection<Posteo> posteos) {
-		this.palabra = palabra;
-		this.posteos = posteos;
+		this.posteos = new ArrayList<Posteo>();
 		this.nr = 0;
 		this.maxtf = 0;
 	}
 
-	public long getId() {
-		return id;
+	public Vocabulario(String palabra) {
+		this();
+		this.palabra = palabra;
 	}
 
-	public void setId(long id) {
-		this.id = id;
+	public Vocabulario(String palabra, Collection<Posteo> posteos) {
+		this();
+		this.palabra = palabra;
+		this.posteos = posteos;
 	}
 
 	public String getPalabra() {

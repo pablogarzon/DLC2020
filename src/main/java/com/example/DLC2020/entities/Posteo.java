@@ -36,11 +36,11 @@ public class Posteo implements Serializable, DalEntity {
 	@Column(name = "IDPOSTEO")
 	private long id;
 
-	@JoinColumn(name = "IDDOC", referencedColumnName = "IDDOC", insertable = false, updatable = false)
+	@JoinColumn(name = "IDDOC", referencedColumnName = "IDDOC")
 	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	private Documento documento;
 	
-	@JoinColumn(name = "PALABRA", referencedColumnName = "PALABRA", insertable = false, updatable = false)
+	@JoinColumn(name = "PALABRA", referencedColumnName = "PALABRA")
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	private Vocabulario vocabulario;
     
@@ -51,8 +51,6 @@ public class Posteo implements Serializable, DalEntity {
 
 	}
 	
-	
-
 	public long getId() {
 		return id;
 	}
@@ -127,7 +125,7 @@ public class Posteo implements Serializable, DalEntity {
 
 	@Override
 	public String toString() {
-		return "com.example.DLC2020.entities.Posteo[ doc=" + this.documento.getIddoc() + " ]";
+		return "com.example.DLC2020.entities.Posteo[ doc=" + this.documento.getIddoc() + ", palabra = " + this.vocabulario.getPalabra() + " ]";
 	}
 
 }
