@@ -50,6 +50,23 @@ public abstract class DaoEclipseLink<E extends DalEntity, K> implements Dao<E, K
 
         return pData;
     }
+    
+//    public boolean createBatch(List<E> pData)
+//    {
+//        try
+//        {
+//        	EntityTransaction tx = entityManager.getTransaction();
+//        	tx.begin();
+//        	entityManager.persist(pData);
+//        	tx.commit();
+//        }
+//        catch (Exception ex)
+//        {
+//            throw new TechnicalException(ex);
+//        }
+//
+//        return true;
+//    }
 
     @Override
     @Transactional
@@ -57,9 +74,11 @@ public abstract class DaoEclipseLink<E extends DalEntity, K> implements Dao<E, K
     {
         try
         {
+        	EntityTransaction tx = entityManager.getTransaction();
+        	tx.begin();
             E managed = entityManager.merge(pData);
             entityManager.persist(managed);
-            entityManager.flush();
+            tx.commit();
         }
         catch (Exception ex)
         {

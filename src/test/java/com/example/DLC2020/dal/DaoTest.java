@@ -31,6 +31,8 @@ public class DaoTest {
 		doc1.setNombre("title");
 		doc1.setUrl("url");
 		documentoDao.create(doc1);
+		doc1.setUrl("ur2");
+		documentoDao.update(doc1);
 		Vocabulario vocabulario = TestUtils.createVocabulario(TestUtils.STR_HELLO, new HashMap() {{ put(doc1, 1);}});
 		Vocabulario v1 = vocabularioDao.create(vocabulario);
 		assertTrue("object is not null", v1 != null);
@@ -40,6 +42,5 @@ public class DaoTest {
 		
 		Vocabulario find = vocabularioDao.findByWord(TestUtils.STR_HELLO);
 		assertTrue("findbyWord is ok", find != null);
-
 	}
 }
