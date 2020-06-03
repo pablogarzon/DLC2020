@@ -1,5 +1,6 @@
 package com.example.DLC2020.dal.commons;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -51,22 +52,25 @@ public abstract class DaoEclipseLink<E extends DalEntity, K> implements Dao<E, K
         return pData;
     }
     
-//    public boolean createBatch(List<E> pData)
-//    {
-//        try
-//        {
-//        	EntityTransaction tx = entityManager.getTransaction();
-//        	tx.begin();
-//        	entityManager.persist(pData);
-//        	tx.commit();
-//        }
-//        catch (Exception ex)
-//        {
-//            throw new TechnicalException(ex);
-//        }
-//
-//        return true;
-//    }
+    public boolean createBatch(List<E> pData)
+    {
+        try
+        {
+        	EntityTransaction tx = entityManager.getTransaction();
+        	tx.begin();
+        	for (Iterator<E> iterator = pData.iterator(); iterator.hasNext();) {
+				E e = (E) iterator.next();
+				entityManager.persist(e);
+			}
+        	tx.commit();
+        }
+        catch (Exception ex)
+        {
+            throw new TechnicalException(ex);
+        }
+
+        return true;
+    }
 
     @Override
     @Transactional

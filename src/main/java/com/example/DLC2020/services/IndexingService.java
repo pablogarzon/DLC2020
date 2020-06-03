@@ -106,14 +106,16 @@ public class IndexingService {
 				p.setTf(post.getValue());
 				v.addPosteo(p);
 			}
-			vocabularioDao.create(v);
-			//words.add(v);
+			//vocabularioDao.create(v);
+			words.add(v);
 			
-//			if (cnt++ % 50 == 0) {
-//				vocabularioDao.createBatch(words);
-//				words.clear();
-//			}
+			if (cnt++ % 500 == 0) {
+				vocabularioDao.createBatch(words);
+				words.clear();
+			}
 		}
-//		System.out.println(words.size());
+		if(words.size() > 0) {
+			vocabularioDao.createBatch(words);
+		}
 	}
 }
