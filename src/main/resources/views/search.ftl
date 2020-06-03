@@ -38,7 +38,7 @@
           </form>
         </header>
         <section class="section">
-            <article class="box" v-for="doc in docs">
+        	<article class="box" v-for="doc in docs">
                 <div class="columns is-vcentered">
                     <div class="column is-half">
                         <h4 class="title is-4">{{doc.nombre}}</h3>
@@ -48,6 +48,7 @@
                     </div>
                 </div>
             </article>
+        	<h4 v-if="isResultEmpty" class="title is-4">No se encontraron resultados.</h4>
         </section>
       </div>
     </section>
@@ -58,17 +59,20 @@
 		    return {
 		    	query: '',
 		    	isLoading: false,
-		    	results: []
+		    	docs: [],
+		    	isResultEmpty: false
 		    };
 		  },
 		  methods: {
 		  	submit: function (e) {
 		  		this.isLoading = true;
 	  		    axios
-                  .get('dlc2020/query=' + this.query)
+                  .get('dlc2020/query?q=' + this.query)
       			  .then(response => {
       			  	this.docs = response.data;
       			  	this.isLoading = false;
+      			  	if(response.data.length === 0)
+      			  		this.isResultEmpty = true;
       			  });
 		  		e.preventDefault();
 		  	}

@@ -1,9 +1,8 @@
 package com.example.DLC2020.dal.commons;
 
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -32,6 +31,9 @@ public class VocabularioDao extends DaoEclipseLink<Vocabulario, Integer>{
 	            query.setParameter(p, word);
 	            return query.getSingleResult();
 	        }
+		 	catch (NoResultException e) {
+				return null;
+			}
 	        catch (Exception ex)
 	        {
 	            throw new TechnicalException(ex);

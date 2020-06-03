@@ -16,6 +16,7 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.ResponseBuilder;
@@ -38,7 +39,7 @@ public class SearchController {
 	@GET
 	@Path("{query}")
 	@Produces({MediaType.APPLICATION_JSON})
-	public List<Documento> search(@PathParam("query") String query) {
+	public List<Documento> search(@QueryParam("q") String query) {
 		List<Documento> docs = new ArrayList<>();
 		service.search(query);
 		return docs;

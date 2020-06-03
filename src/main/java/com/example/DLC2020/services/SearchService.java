@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import com.example.DLC2020.Commons;
+import com.example.DLC2020.commons.Constants;
 import com.example.DLC2020.dal.commons.DocumentoDao;
 import com.example.DLC2020.dal.commons.VocabularioDao;
 import com.example.DLC2020.entities.Documento;
@@ -40,7 +40,6 @@ public class SearchService {
 		//filtrar y ordenar elementos
 		 List<Vocabulario> v = getV(q);
 		
-		
 		v.forEach(tk -> {
 			int i = 0;
 			tk.getPosteos().forEach(pk -> {
@@ -68,21 +67,18 @@ public class SearchService {
 
 	private List<Vocabulario> getV(String q) {
 		
-		List<String> terms = Arrays.asList(q.split(Commons.delims));
-		//List<Vocabulario> words = vocabularioDao.findAll();
-		
-
-//		return words.stream()
-//			.filter(w -> terms.contains(w.getPalabra()))
-//			.sorted((o1, o2) -> Integer.compare(o2.getNr(), o1.getNr()))
-//			.collect(Collectors.toList());
-		
+		List<String> terms = Arrays.asList(q.split(Constants.DELIMS));		
 		List<Vocabulario> words = new ArrayList<Vocabulario>();
+		
 		for (String w : terms) {
-			words.add(vocabularioDao.findByWord(w));
+			Vocabulario v = vocabularioDao.findByWord(w);
+			if (v != null) {
+				words.add(v);
+			}
 		}
 		
-		return words.stream().sorted((o1, o2) -> Integer.compare(o2.getNr(), o1.getNr()))
+		return words.stream()
+				.sorted((o1, o2) -> Integer.compare(o2.getNr(), o1.getNr()))
 				.collect(Collectors.toList());
 	}
 }
