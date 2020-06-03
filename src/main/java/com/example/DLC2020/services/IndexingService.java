@@ -1,7 +1,6 @@
 package com.example.DLC2020.services;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -10,13 +9,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-import com.example.DLC2020.Commons;
+import com.example.DLC2020.commons.Constants;
 import com.example.DLC2020.dal.commons.DocumentoDao;
 import com.example.DLC2020.dal.commons.VocabularioDao;
 import com.example.DLC2020.entities.Documento;
@@ -59,10 +57,10 @@ public class IndexingService {
 
 		try (Stream<String> stream = Files.lines(file.toPath(), StandardCharsets.ISO_8859_1)) {
 			stream.forEach(l -> {
-				List<String> line = Stream.of(l.toLowerCase().split(Commons.delims)).collect(Collectors.toList());
+				List<String> line = Stream.of(l.toLowerCase().split(Constants.DELIMS)).collect(Collectors.toList());
 
 				// remover los stopwords
-				line.removeAll(Commons.STOP_WORDS);
+				line.removeAll(Constants.STOP_WORDS);
 
 				for (String word : line) {
 					if (ignoredWords.contains(word))
@@ -106,7 +104,7 @@ public class IndexingService {
 				p.setTf(post.getValue());
 				v.addPosteo(p);
 			}
-			//vocabularioDao.create(v);
+			
 			words.add(v);
 			
 			if (cnt++ % 500 == 0) {

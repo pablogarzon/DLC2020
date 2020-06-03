@@ -1,12 +1,12 @@
-package com.example.DLC2020;
+package com.example.DLC2020.commons;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class Commons {
-	public static String delims = "[ .,?!--;://_@!¡«»?¿0-9=°ªï»¿~<>]+";
+public class Constants {
+	public final static String DELIMS = "[ .,?!--;://_@!¡«»?¿0-9=°ªï»¿~<>]+";
 
-	public static List<String> STOP_WORDS = Arrays.asList("a’s", "able", "about", "above", "according", "accordingly",
+	public final static List<String> STOP_WORDS = Arrays.asList("a’s", "able", "about", "above", "according", "accordingly",
 			"across", "actually", "after", "afterwards", "again", "against", "ain’t", "all", "allow", "allows",
 			"almost", "alone", "along", "already", "also", "although", "always", "am", "among", "amongst", "an", "and",
 			"another", "any", "anybody", "anyhow", "anyone", "anything", "anyway", "anyways", "anywhere", "apart",
