@@ -41,7 +41,7 @@ public class SearchController {
 	@Produces({MediaType.APPLICATION_JSON})
 	public List<Documento> search(@QueryParam("q") String query) {
 		List<Documento> docs = new ArrayList<>();
-		service.search(query);
+		docs = service.search(query);
 		return docs;
 	}
 	

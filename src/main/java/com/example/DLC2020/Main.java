@@ -15,7 +15,7 @@ import com.example.DLC2020.config.AppConfig;
  */
 public class Main {
     // Base URI the Grizzly HTTP server will listen on
-    public static final String BASE_URI = "http://localhost:8085/dlc2020";
+    public static final String BASE_URI = "http://localhost:8085/";
 
     /**
      * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.

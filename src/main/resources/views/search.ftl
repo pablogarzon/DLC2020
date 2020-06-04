@@ -67,7 +67,7 @@
 		  	submit: function (e) {
 		  		this.isLoading = true;
 	  		    axios
-                  .get('dlc2020/query?q=' + this.query)
+                  .get('query?q=' + this.query)
       			  .then(response => {
       			  	this.docs = response.data;
       			  	this.isLoading = false;
