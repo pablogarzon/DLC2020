@@ -13,16 +13,17 @@ import com.example.DLC2020.commons.Constants;
 import com.example.DLC2020.dal.commons.DocumentoDao;
 import com.example.DLC2020.dal.commons.VocabularioDao;
 import com.example.DLC2020.entities.Documento;
+import com.example.DLC2020.entities.Posteo;
 import com.example.DLC2020.entities.Vocabulario;
 
 public class SearchService {
-	
+
 	private final VocabularioDao vocabularioDao;
 	private final DocumentoDao documentoDao;
-	
+
 	public final static int R = 10;
 	public long N;
-	
+
 	@Inject
 	public SearchService(VocabularioDao vocabularioDao, DocumentoDao documentoDao) {
 		this.vocabularioDao = vocabularioDao;
@@ -31,18 +32,15 @@ public class SearchService {
 
 	public List<Documento> search(String q) {
 		Map<Documento, Double> ld = new TreeMap<>();
-		
+
 		N = documentoDao.count();
-		
-		List<String> terms = Arrays.asList(q.split(" "));
-		List<Vocabulario> words = vocabularioDao.findAll();
-		
-		//filtrar y ordenar elementos
-		 List<Vocabulario> v = getV(q);
-		
-		v.forEach(tk -> {
+
+		// filtrar y ordenar elementos
+		List<Vocabulario> v = getV(q);
+
+		for (Vocabulario tk: v) {
 			int i = 0;
-			tk.getPosteos().forEach(pk -> {
+			for (Posteo pk : tk.getPosteos()) {
 				if (i < R) {
 					try {
 						double prevVal = ld.getOrDefault(pk.getDocumento(), 0.0);
@@ -52,33 +50,29 @@ public class SearchService {
 						System.out.println(e);
 					}
 				} else {
-					return;
-				};
-			});
-		});
-		
-		List result = ld.entrySet().stream()
-			.sorted((o1, o2) -> Double.compare(o2.getValue(), o1.getValue()))
-			.map(Map.Entry::getKey)
-			.collect(Collectors.toList());
-		
+					break;
+				}
+			}
+		}
+
+		List result = ld.entrySet().stream().sorted((o1, o2) -> Double.compare(o2.getValue(), o1.getValue()))
+				.map(Map.Entry::getKey).collect(Collectors.toList());
+
 		return result;
 	}
 
 	private List<Vocabulario> getV(String q) {
-		
-		List<String> terms = Arrays.asList(q.split(Constants.DELIMS));		
+
+		List<String> terms = Arrays.asList(q.toLowerCase().split(Constants.DELIMS));
 		List<Vocabulario> words = new ArrayList<Vocabulario>();
-		
+
 		for (String w : terms) {
 			Vocabulario v = vocabularioDao.findByWord(w);
 			if (v != null) {
 				words.add(v);
 			}
 		}
-		
-		return words.stream()
-				.sorted((o1, o2) -> Integer.compare(o2.getNr(), o1.getNr()))
-				.collect(Collectors.toList());
+
+		return words.stream().sorted((o1, o2) -> Integer.compare(o2.getNr(), o1.getNr())).collect(Collectors.toList());
 	}
 }

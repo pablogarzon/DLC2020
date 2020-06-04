@@ -66,6 +66,7 @@
 		  methods: {
 		  	submit: function (e) {
 		  		this.isLoading = true;
+		  		this.isResultEmpty = false;
 	  		    axios
                   .get('query?q=' + this.query)
       			  .then(response => {
