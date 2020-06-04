@@ -48,11 +48,11 @@ public class SearchController {
 	@POST
 	@Path("{document}")
 	@Produces({MediaType.TEXT_PLAIN})
-	public Response download(@PathParam("document") String path) {
-		File file = new File(path);
+	public Response download(Documento documento) {
+		File file = new File(documento.getUrl());
 		ResponseBuilder response = Response.ok((Object) file);
 		response.header("Content-Disposition",
-			"attachment; filename=\"filename.txt\"");
+			"attachment; filename=\""+ documento.getNombre() + "\"");
 		return response.build();
 	}
 }

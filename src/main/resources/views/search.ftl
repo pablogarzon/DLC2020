@@ -38,13 +38,13 @@
           </form>
         </header>
         <section class="section">
-        	<article class="box" v-for="doc in docs">
+        	<article class="box" v-for="doc in docs" :key="doc.iddoc">
                 <div class="columns is-vcentered">
                     <div class="column is-half">
                         <h4 class="title is-4">{{doc.nombre}}</h3>
                     </div>
                     <div class="column is-half has-text-right">
-                        <a href="#">Descargar</a>
+                        <a href="#" @click="getFile(doc)">Descargar</a>
                     </div>
                 </div>
             </article>
@@ -76,6 +76,18 @@
       			  		this.isResultEmpty = true;
       			  });
 		  		e.preventDefault();
+		  	},
+		  	getFile: function (doc) {
+		  		axios
+                  .post('document', doc)
+      			  .then(response => {
+      			  	const url = window.URL.createObjectURL(new Blob([response.data]));
+      			  	const link = document.createElement('a');
+					link.href = url;
+					link.setAttribute('download', doc.nombre);
+					document.body.appendChild(link);
+					link.click();
+      			  });
 		  	}
 		  }
 		});
