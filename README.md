@@ -2,4 +2,11 @@
 
 ## Consigna
 
-[enunciado](./consigna.md)
+[enunciado](./consigna.md) 
+
+## Ejecutar el proyecto
+```sh
+$ mvn clean install
+$ mvn exec:java
+
+```
