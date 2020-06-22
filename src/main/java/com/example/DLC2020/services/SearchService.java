@@ -43,7 +43,9 @@ public class SearchService {
 			for (Posteo pk : tk.getPosteos()) {
 				if (i < R) {
 					try {
+						// obtener el peso anterior
 						double prevVal = ld.getOrDefault(pk.getDocumento(), 0.0);
+						// recalcula el peso
 						double val = prevVal + Math.log(pk.getTf() * (N / tk.getNr()));
 						ld.put(pk.getDocumento(), val);
 					} catch (Exception e) {
@@ -54,7 +56,7 @@ public class SearchService {
 				}
 			}
 		}
-
+		//ordenar el map por el peso y convertir a lista
 		List result = ld.entrySet().stream().sorted((o1, o2) -> Double.compare(o2.getValue(), o1.getValue()))
 				.map(Map.Entry::getKey).collect(Collectors.toList());
 

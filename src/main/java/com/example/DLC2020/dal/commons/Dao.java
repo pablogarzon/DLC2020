@@ -21,6 +21,8 @@ public interface Dao<E extends DalEntity, K>
     void delete(K pKey);
     
     E create(E pData);
+    
+    boolean createBatch(List<E> pData);
 
     E retrieve(K pKey);
 

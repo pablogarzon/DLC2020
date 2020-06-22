@@ -52,6 +52,7 @@ public abstract class DaoEclipseLink<E extends DalEntity, K> implements Dao<E, K
         return pData;
     }
     
+    @Override
     public boolean createBatch(List<E> pData)
     {
         try
