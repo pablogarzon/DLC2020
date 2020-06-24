@@ -40,25 +40,31 @@ public class IndexingService {
 
 		// map de primitivos donde la clave es la palabra, el valor seria otro map con 
 		// el iddoc como clave y la cantidad de ocurrencias como valor
-		Map<String, Map<Integer, Integer>> wordPosts = new HashMap<>();
-		// map con iddoc y el documento
-		Map<Integer, Documento> docs = new HashMap<>();
+		Map<String, Integer> posts = new HashMap<>();
 
 		int index = 0;
 		for (final File file : directory.listFiles()) {
-			Documento d = new Documento();
-			d.setNombre(file.getName());
-			d.setUrl(folder + "/" + file.getName());
-			documentoDao.create(d);
+			if(documentoDao.findByName(file.getName()) == null) {
+				try {
+					posts = readFile(file);
+					Documento d = new Documento();
+					d.setNombre(file.getName());
+					d.setUrl(folder + "/" + file.getName());
+					save(d, posts);
+				} catch (IOException e) {
+					continue;
+				}
+			}
+			
 			index += 1;
 			System.out.println("leyendo " + file.getName()+ " - " + index);
-			readFile(file, d.getIddoc(), wordPosts);
-			docs.put(d.getIddoc(), d);
+			
 		}
-		save(wordPosts, docs);
 	}
 
-	public void readFile(File file, int iddoc, Map<String, Map<Integer, Integer>> wordPosts) {
+	public Map<String, Integer> readFile(File file) throws IOException {
+		Map<String, Integer> posts = new HashMap<>();
+		
 		try (Stream<String> stream = Files.lines(file.toPath(), StandardCharsets.ISO_8859_1)) {
 			stream.forEach(l -> {
 				List<String> line = Stream.of(l.toLowerCase().split(Constants.DELIMS)).collect(Collectors.toList());
@@ -68,50 +74,71 @@ public class IndexingService {
 
 				for (String word : line) {
 					// posteos para este documento
-					Map<Integer, Integer> posts = wordPosts.getOrDefault(word, new HashMap());
-					int tf = posts.getOrDefault(iddoc, 0) + 1;
-					posts.put(iddoc, tf);
-					wordPosts.put(word, posts);
+					int tf = posts.getOrDefault(word, 0) + 1;
+					posts.put(word, tf);
 				}
 			});
-
+			
+			return posts;
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw e;
 		}
 	}
 
-	private void save(Map<String, Map<Integer, Integer>> wordPosts, Map<Integer, Documento> docs) {
+	private void save(Documento documento, Map<String, Integer> posts) {
 		final int chunkSize = 500;
-		Vocabulario[] words = new Vocabulario[chunkSize];
 		
-		int cnt = 0;
+		ArrayList<Vocabulario> wordsToSave = new ArrayList<>();
+		ArrayList<Vocabulario> wordsToUpdate = new ArrayList<>();
+		
+		documentoDao.create(documento);
 
-		for (Entry<String, Map<Integer, Integer>> entry : wordPosts.entrySet()) {
-			String word = entry.getKey();
-			Map<Integer, Integer> posts = entry.getValue();
+		for (Entry<String, Integer> post : posts.entrySet()) {
+			String word = post.getKey();
+			
+			boolean insert = false;
+			
+			Vocabulario v = vocabularioDao.findByWord(word);
+			
+			if (v == null) {
+				v = new Vocabulario(word);
+				insert = true;
+			}
 
-			Vocabulario v = new Vocabulario(word);
-
-			for (Entry<Integer, Integer> post : posts.entrySet()) {
-				int iddoc = post.getKey();
-
-				Posteo p = new Posteo();
-				p.setVocabulario(v);
-				p.setDocumento(docs.get(iddoc));
-				p.setTf(post.getValue());
-				v.addPosteo(p);
+			Posteo p = new Posteo();
+			p.setVocabulario(v);
+			p.setDocumento(documento);
+			p.setTf(post.getValue());
+			v.addPosteo(p);
+			
+			if (insert) {
+				wordsToSave.add(v);
+			} else {
+				wordsToUpdate.add(v);
 			}
 			
-			words[cnt] = v;
-			cnt++;
-			if (cnt % chunkSize == 0) {
-				vocabularioDao.createBatch(words);
-				words = new Vocabulario[chunkSize];
-				cnt = 0;
+			if (wordsToSave.size() == chunkSize) {
+				createWords(wordsToSave);
+			}
+			if (wordsToUpdate.size() == chunkSize) {
+				updateWords(wordsToUpdate);
 			}
 		}
-		if(words.length > 0) {
-			vocabularioDao.createBatch(words);
+		createWords(wordsToSave);
+		updateWords(wordsToUpdate);
+	}
+	
+	private void updateWords(ArrayList<Vocabulario> wordsToUpdate) {
+		if (wordsToUpdate.size() > 0) {
+			vocabularioDao.updateBatch(wordsToUpdate);
+			wordsToUpdate.clear();
+		}
+	}
+
+	private void createWords(ArrayList<Vocabulario> wordsToSave) {
+		if (wordsToSave.size() > 0) {
+			vocabularioDao.createBatch(wordsToSave);
+			wordsToSave.clear();
 		}
 	}
 }
