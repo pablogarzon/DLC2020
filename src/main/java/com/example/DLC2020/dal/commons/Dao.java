@@ -6,6 +6,8 @@ package com.example.DLC2020.dal.commons;
 //import utn.dlc.commons.exceptions.TechnicalException;
 import java.util.List;
 
+import javax.persistence.criteria.Expression;
+
 /**
  * Interfaz que define los métodos mínimos a ser implementados por un dao para una entidad mapeada a la base de datos
  *  
@@ -22,11 +24,13 @@ public interface Dao<E extends DalEntity, K>
     
     E create(E pData);
     
-    boolean createBatch(List<E> pData);
+    boolean createBatch(E[] pData);
 
     E retrieve(K pKey);
 
     List<E> findAll();
+    
+    List<E> findByFilter(Expression<Boolean> expression);
     
     long count();
 

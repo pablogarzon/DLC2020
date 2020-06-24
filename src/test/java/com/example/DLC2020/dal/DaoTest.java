@@ -2,7 +2,6 @@ package com.example.DLC2020.dal;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -46,6 +45,6 @@ public class DaoTest {
 		
 		Vocabulario vocabulario2 = TestUtils.createVocabulario(TestUtils.STR_DINOSAURS, new HashMap() {{ put(doc1, 3);}});
 		Vocabulario vocabulario3 = TestUtils.createVocabulario(TestUtils.STR_CADILLACS, new HashMap() {{ put(doc1, 1);}});
-		assertTrue("saved", vocabularioDao.createBatch(Arrays.asList(vocabulario2, vocabulario3)));
+		assertTrue("saved", vocabularioDao.createBatch(new Vocabulario[] {vocabulario2, vocabulario3}));
 	}
 }

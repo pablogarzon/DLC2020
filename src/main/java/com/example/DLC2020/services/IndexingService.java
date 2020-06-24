@@ -46,19 +46,21 @@ public class IndexingService {
 		//map con iddoc y el documento
 		Map<Integer, Documento> docs = new HashMap<>();
 
+		int index = 0;
 		for (final File file : directory.listFiles()) {
 			Documento d = new Documento();
 			d.setNombre(file.getName());
 			d.setUrl(folder + "/" + file.getName());
 			documentoDao.create(d);
 			docs.put(d.getIddoc(), d);
+			index += 1;
+			System.out.println("leyendo " + file.getName()+ " - " + index);
 			readFile(file, d.getIddoc(), wordPosts);
 		}
 		save(wordPosts, docs);
 	}
 
 	public void readFile(File file, int iddoc, Map<String, Map<Integer, Integer>> wordPosts) {
-
 		try (Stream<String> stream = Files.lines(file.toPath(), StandardCharsets.ISO_8859_1)) {
 			stream.forEach(l -> {
 				List<String> line = Stream.of(l.toLowerCase().split(Constants.DELIMS)).collect(Collectors.toList());
@@ -93,7 +95,8 @@ public class IndexingService {
 	}
 
 	private void save(Map<String, Map<Integer, Integer>> wordPosts, Map<Integer, Documento> docs) {
-		List<Vocabulario> words = new ArrayList<>();
+		final int chunkSize = 500;
+		Vocabulario[] words = new Vocabulario[chunkSize];
 		
 		int cnt = 0;
 
@@ -113,14 +116,14 @@ public class IndexingService {
 				v.addPosteo(p);
 			}
 			
-			words.add(v);
+			words[cnt] = v;
 			
-			if (cnt++ % 500 == 0) {
+			if (cnt > 1 && cnt++ % chunkSize == 0) {
 				vocabularioDao.createBatch(words);
-				words.clear();
+				words = new Vocabulario[chunkSize];
 			}
 		}
-		if(words.size() > 0) {
+		if(words.length > 0) {
 			vocabularioDao.createBatch(words);
 		}
 	}
