@@ -28,7 +28,7 @@ public class DaoTest {
 		documentoDao = new DocumentoDao(entityManager);
 		
 		Documento doc1 = new Documento();
-		doc1.setNombre("title");
+		doc1.setNombre(TestUtils.STR_PROGRAM);
 		doc1.setUrl("url");
 		documentoDao.create(doc1);
 		doc1.setUrl("ur2");
@@ -41,7 +41,10 @@ public class DaoTest {
 		assertTrue("list is not empty", words != null && words.size() > 0);
 		
 		Vocabulario find = vocabularioDao.findByWord(TestUtils.STR_HELLO);
-		assertTrue("findbyWord is ok", find != null);
+		assertTrue("findByWord is ok", find != null);
+		
+		Documento findDoc = documentoDao.findByName(TestUtils.STR_PROGRAM);
+		assertTrue("findByName is ok", findDoc.getNombre().equals(doc1.getNombre()));
 		
 		Vocabulario vocabulario2 = TestUtils.createVocabulario(TestUtils.STR_DINOSAURS, new HashMap() {{ put(doc1, 3);}});
 		Vocabulario vocabulario3 = TestUtils.createVocabulario(TestUtils.STR_CADILLACS, new HashMap() {{ put(doc1, 1);}});
