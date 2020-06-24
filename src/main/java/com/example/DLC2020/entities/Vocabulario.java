@@ -99,6 +99,7 @@ public class Vocabulario implements Serializable, DalEntity {
 	public void addPosteo(Posteo posteo) {
 		if (this.posteos != null) {
 			this.posteos.add(posteo);
+			this.maxtf += posteo.getTf();
 			this.nr += 1;
 		}
 	}
