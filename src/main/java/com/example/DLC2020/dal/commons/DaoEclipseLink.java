@@ -1,6 +1,7 @@
 package com.example.DLC2020.dal.commons;
 
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -21,10 +22,10 @@ public abstract class DaoEclipseLink<E extends DalEntity, K> implements Dao<E, K
 	
 	protected EntityManager entityManager;
 	
-	private final Class<E> entityClass;
-	private final CriteriaBuilder criteriaBuilder;
-	private final CriteriaQuery<E> criteriaQuery;
-	private final Root<E> root;
+	protected final Class<E> entityClass;
+	protected final CriteriaBuilder criteriaBuilder;
+	protected final CriteriaQuery<E> criteriaQuery;
+	protected final Root<E> root;
 
 	public DaoEclipseLink(Class<E> entityClass, EntityManager entityManager) {
 		this.entityManager = entityManager;

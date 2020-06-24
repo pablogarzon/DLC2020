@@ -3,11 +3,7 @@ package com.example.DLC2020.dal.commons;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.ParameterExpression;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Expression;
 
 import com.example.DLC2020.dal.exceptions.TechnicalException;
 import com.example.DLC2020.entities.Vocabulario;
@@ -22,14 +18,8 @@ public class VocabularioDao extends DaoEclipseLink<Vocabulario, Integer>{
 	public Vocabulario findByWord(String word) {
 		 try
 	        {
-	        	CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-	            CriteriaQuery<Vocabulario> cq = cb.createQuery(Vocabulario.class);
-	            Root<Vocabulario> rootQuery = cq.from(Vocabulario.class);
-	            ParameterExpression<String> p = cb.parameter(String.class);
-	            cq.select(rootQuery).where(cb.equal(rootQuery.get("palabra"), p));
-	            TypedQuery<Vocabulario> query = entityManager.createQuery(cq);
-	            query.setParameter(p, word);
-	            return query.getSingleResult();
+	            Expression<Boolean> expression = criteriaBuilder.equal(root.get("palabra"), word);
+	            return super.findByFilter(expression).get(0);   
 	        }
 		 	catch (NoResultException e) {
 				return null;
