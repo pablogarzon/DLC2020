@@ -1,16 +1,13 @@
 package com.example.DLC2020.dal.commons;
 
 import java.util.List;
-import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
-import javax.transaction.Transactional;
 
 import com.example.DLC2020.dal.exceptions.TechnicalException;
 
@@ -37,13 +34,9 @@ public abstract class DaoEclipseLink<E extends DalEntity, K> implements Dao<E, K
 	}
 
 	@Override
-	@Transactional
 	public E create(E pData) {
 		try {
-			EntityTransaction tx = entityManager.getTransaction();
-			tx.begin();
 			entityManager.persist(pData);
-			tx.commit();
 		} catch (Exception ex) {
 			throw new TechnicalException(ex);
 		}
@@ -52,39 +45,15 @@ public abstract class DaoEclipseLink<E extends DalEntity, K> implements Dao<E, K
 	}
 
 	@Override
-	public boolean createBatch(E[] pData) {
-		try {
-			EntityTransaction tx = entityManager.getTransaction();
-			tx.begin();
-			for (int i = 0; i < pData.length; i++) {
-				if (pData[i] != null)
-					entityManager.persist(pData[i]);
-			}
-
-			tx.commit();
-		} catch (Exception ex) {
-			throw new TechnicalException(ex);
-		}
-
-		return true;
-	}
-
-	@Override
-	@Transactional
 	public void update(E pData) {
 		try {
-			EntityTransaction tx = entityManager.getTransaction();
-			tx.begin();
-			E managed = entityManager.merge(pData);
-			entityManager.persist(managed);
-			tx.commit();
+			entityManager.merge(pData);
 		} catch (Exception ex) {
 			throw new TechnicalException(ex);
 		}
 	}
 
 	@Override
-	@Transactional
 	public void delete(K pKey) {
 		try {
 			entityManager.remove(retrieve(pKey));

@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +12,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 
 import com.example.DLC2020.commons.Constants;
 import com.example.DLC2020.dal.commons.DocumentoDao;
@@ -25,11 +26,13 @@ public class IndexingService {
 
 	private final DocumentoDao documentoDao;
 	private final VocabularioDao vocabularioDao;
+	private EntityManager entityManager;
 
 	@Inject
-	public IndexingService(DocumentoDao documentoDao, VocabularioDao vocabularioDao) {
+	public IndexingService(DocumentoDao documentoDao, VocabularioDao vocabularioDao, EntityManager entityManager) {
 		this.documentoDao = documentoDao;
 		this.vocabularioDao = vocabularioDao;
+		this.entityManager = entityManager;
 	}
 
 	public void indexing(String folder) throws Exception {
@@ -46,6 +49,7 @@ public class IndexingService {
 		for (final File file : directory.listFiles()) {
 			if(documentoDao.findByName(file.getName()) == null) {
 				try {
+					System.out.println("reading file " + file.getName());
 					posts = readFile(file);
 					Documento d = new Documento();
 					d.setNombre(file.getName());
@@ -86,59 +90,39 @@ public class IndexingService {
 	}
 
 	private void save(Documento documento, Map<String, Integer> posts) {
-		final int chunkSize = 500;
+		EntityTransaction tx = entityManager.getTransaction();
 		
-		ArrayList<Vocabulario> wordsToSave = new ArrayList<>();
-		ArrayList<Vocabulario> wordsToUpdate = new ArrayList<>();
-		
-		documentoDao.create(documento);
+		try {
+			tx.begin();
+			documentoDao.create(documento);
+			for (Entry<String, Integer> post : posts.entrySet()) {
+				String word = post.getKey();
+				
+				boolean insert = false;
+				
+				Vocabulario v = vocabularioDao.findByWord(word);
+				
+				if (v == null) {
+					v = new Vocabulario(word);
+					insert = true;
+				}
 
-		for (Entry<String, Integer> post : posts.entrySet()) {
-			String word = post.getKey();
-			
-			boolean insert = false;
-			
-			Vocabulario v = vocabularioDao.findByWord(word);
-			
-			if (v == null) {
-				v = new Vocabulario(word);
-				insert = true;
+				Posteo p = new Posteo();
+				p.setVocabulario(v);
+				p.setDocumento(documento);
+				p.setTf(post.getValue());
+				v.addPosteo(p);
+				
+				if (insert) {
+					vocabularioDao.create(v);
+				} else {
+					vocabularioDao.update(v);
+				}
 			}
-
-			Posteo p = new Posteo();
-			p.setVocabulario(v);
-			p.setDocumento(documento);
-			p.setTf(post.getValue());
-			v.addPosteo(p);
-			
-			if (insert) {
-				wordsToSave.add(v);
-			} else {
-				wordsToUpdate.add(v);
-			}
-			
-			if (wordsToSave.size() == chunkSize) {
-				createWords(wordsToSave);
-			}
-			if (wordsToUpdate.size() == chunkSize) {
-				updateWords(wordsToUpdate);
-			}
-		}
-		createWords(wordsToSave);
-		updateWords(wordsToUpdate);
-	}
-	
-	private void updateWords(ArrayList<Vocabulario> wordsToUpdate) {
-		if (wordsToUpdate.size() > 0) {
-			vocabularioDao.updateBatch(wordsToUpdate);
-			wordsToUpdate.clear();
-		}
-	}
-
-	private void createWords(ArrayList<Vocabulario> wordsToSave) {
-		if (wordsToSave.size() > 0) {
-			vocabularioDao.createBatch(wordsToSave);
-			wordsToSave.clear();
+			tx.commit();			
+		} catch (Exception e) {
+			System.out.println(e.getStackTrace());
+			tx.rollback();
 		}
 	}
 }

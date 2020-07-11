@@ -1,5 +1,7 @@
 package com.example.DLC2020.dal.commons;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -18,7 +20,11 @@ public class DocumentoDao extends DaoEclipseLink<Documento, Integer> {
 	public Documento findByName(String name) {
 		try {
 			Expression<Boolean> expression = criteriaBuilder.equal(root.get("nombre"), name);
-			return super.findByFilter(expression).get(0);
+			List<Documento> docs = findByFilter(expression);
+			if(docs.size() > 0)
+				return docs.get(0);
+			else 
+				return null;
 		} catch (NoResultException e) {
 			return null;
 		} catch (Exception ex) {

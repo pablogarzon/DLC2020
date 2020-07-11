@@ -1,5 +1,7 @@
 package com.example.DLC2020.dal.commons;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -18,7 +20,12 @@ public class VocabularioDao extends DaoEclipseLink<Vocabulario, Integer> {
 	public Vocabulario findByWord(String word) {
 		try {
 			Expression<Boolean> expression = criteriaBuilder.equal(root.get("palabra"), word);
-			return super.findByFilter(expression).get(0);
+			List<Vocabulario> words = super.findByFilter(expression);
+			if (words.size() > 0) {
+				return words.get(0);
+			} else {
+				return null;
+			}
 		} catch (NoResultException e) {
 			return null;
 		} catch (Exception ex) {

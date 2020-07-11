@@ -23,7 +23,7 @@ public class IndexingServiceTest {
 		EntityManager entityManager = new EntityManagerFactory().provide();
 		vocabularioDao = new VocabularioDao(entityManager);
 		documentoDao = new DocumentoDao(entityManager);
-		service = new IndexingService(documentoDao, vocabularioDao);
+		service = new IndexingService(documentoDao, vocabularioDao, entityManager);
 	}
 	
 	@Test
